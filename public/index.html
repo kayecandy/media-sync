@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+
+<head>
+	<title>counterbalance.org Deployment Test</title>
+
+
+	<!-- JW Player -->
+	<script type="text/javascript" src="https://cdn.jwplayer.com/libraries/NMuIi6sP.js"></script>
+
+	<!-- CB Player -->
+	<link rel="stylesheet" type="text/css" href="https://adrianwyard.github.io/jwplayer-enhancements/cndce-counterbalance.css"></link>
+	<script src="https://adrianwyard.github.io/jwplayer-enhancements/cndce-counterbalance.js"></script>
+
+    <!-- Media Sync Player -->
+    <script src="./js/cndce-media-sync.js
+    "></script>
+
+
+</head>
+
+	<h1>Client ID# <span id="client-id"></span></h1>
+	<p>
+		<div id="myElement"></div>
+	</p>
+
+	
+	
+	<script>
+
+		const cbPlayer = new CBPlayer({
+			ctf: CBPlayer.PLAYLIST_BASE_URL + "testdir/testrss"  + CBPlayer.PLAYLIST_RSS_EXTENSION,
+			el: 'myElement',
+			autostart: 'true',
+			repeat: false,
+			height: 330,
+			width: 440
+		})
+
+		const msPlayer = new MediaSyncPlayer({
+			jwPlayer: cbPlayer.player,
+			wsUrl: "ws://localhost:8084",
+			testMode: true,
+		});
+
+		msPlayer.on('wsConnected', function(ws, data){
+			document.getElementById('client-id').innerHTML = data.clientId;
+		})
+	</script>
+
+</html>
