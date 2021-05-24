@@ -28,7 +28,6 @@
 	
 	
 	<script>
-
 		const cbPlayer = new CBPlayer({
 			ctf: CBPlayer.PLAYLIST_BASE_URL + "testdir/testrss"  + CBPlayer.PLAYLIST_RSS_EXTENSION,
 			el: 'myElement',
@@ -40,7 +39,7 @@
 
 		const msPlayer = new MediaSyncPlayer({
 			jwPlayer: cbPlayer.player,
-			wsUrl: "ws://localhost:8084",
+			wsUrl: "ws://sync.visuals-live.com:8083",
 			testMode: true,
 		});
 
