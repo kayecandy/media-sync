@@ -4,7 +4,8 @@
   "description": "Enable people in different locations to watch and control the same (synchronized) video, with no reduction in quality, and discuss it using commercial video chat solutions.",
   "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config servers"
+    "start": "node -r dotenv/config servers",
+    "deploy": "bash deploy.sh"
   },
   "author": "Candice Canoso",
   "license": "ISC",
