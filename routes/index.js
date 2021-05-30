@@ -7,7 +7,7 @@ indexRouter.get("/", function (req, res, next) {
     wsUrl: process.env.URL_WS + ":" + process.env.PORT_WS,
     jsTestMode: process.env.JS_TEST_MODE,
   });
-  next();
+  // next();
 });
 
 module.exports = indexRouter;
