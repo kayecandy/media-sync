@@ -7,6 +7,8 @@
  *
  * wsChangeState
  * wsRequestState
+ *
+ * wsMetaUpdate
  */
 class MediaSyncPlayer {
   player;

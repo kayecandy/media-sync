@@ -22,7 +22,11 @@
 
 </head>
 
-	<h1>Client ID# <span id="client-id">NA</span></h1>
+	<p>
+		<h1 style="display: inline-block;">Client ID# <span id="client-id">N/A</span></h1>
+		&nbsp;&nbsp;
+		<span>Connected clients: <span id="connected-clients">N/A</span></span>
+	</p>
 	<p>
 		<div id="myElement"></div>
 		<div 
@@ -54,7 +58,24 @@
 		});
 
 		msPlayer.on('wsConnected', function(ws, data){
-			document.getElementById('client-id').innerHTML = data.clientId;
+			const {
+				clientId,
+				clientSize
+			} = data;
+
+			document.getElementById('client-id').innerHTML = clientId;
+
+			document.getElementById('connected-clients').innerHTML = clientSize;
+		})
+
+		msPlayer.on('wsMetaUpdate', function(ws, data){
+			const {
+				clientSize
+			} = data;
+
+
+			document.getElementById('connected-clients').innerHTML = clientSize;
+			
 		})
 	</script>
 

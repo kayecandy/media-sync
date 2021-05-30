@@ -28,7 +28,6 @@ class WebSocketServer {
     });
 
     this.wss.on("connection", this.__onConnection.bind(this));
-    this.wss.on("close", this.__onClose.bind(this));
 
     console.log("Web socket server started at " + WebSocketServer.PORT_WS);
   }
@@ -38,6 +37,7 @@ class WebSocketServer {
   }
 
   /**
+   * Native `connection` socket event
    *
    * @param {WebSocket} ws
    * @param {IncomingMessage} req
@@ -69,8 +69,7 @@ class WebSocketServer {
       JSON.stringify({
         event: "wsConnected",
         data: {
-          clientId: ws.id,
-          clientSize: this.wss.clients.size,
+          ...this.__getClientMetaData(ws),
         },
       })
     );
@@ -78,11 +77,24 @@ class WebSocketServer {
     ws.on("message", function (res) {
       ms.__onMessage(this, res);
     });
+
+    ws.on("close", this.__onClose.bind(this));
+
+    this.__sendMetaUpdate();
   }
 
-  __onClose() {}
+  /**
+   * Native `close` socket event
+   */
+  __onClose() {
+    console.log("Websocket client closed");
+
+    this.__sendMetaUpdate();
+  }
 
   /**
+   * Native `message` socket event
+   *
    * @param {WebSocket} ws
    * @param {WebSocket.Data} data
    */
@@ -123,6 +135,33 @@ class WebSocketServer {
   }
 
   __onPlayerStateChange(data) {}
+
+  /**
+   * @param {WebSocket} ws
+   */
+  __getClientMetaData(ws) {
+    return {
+      clientId: ws.id,
+      clientSize: this.wss.clients.size,
+    };
+  }
+
+  __sendMetaUpdate() {
+    const socket = this;
+
+    this.wss.clients.forEach(function (ws) {
+      if (ws.readyState == WebSocket.OPEN) {
+        ws.send(
+          JSON.stringify({
+            event: "wsMetaUpdate",
+            data: {
+              ...socket.__getClientMetaData(ws),
+            },
+          })
+        );
+      }
+    });
+  }
 }
 
 module.exports = WebSocketServer;
