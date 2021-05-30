@@ -10,6 +10,16 @@
  */
 class MediaSyncPlayer {
   player;
+
+  /**
+   * @type {HTMLElement}
+   */
+  domPlayer;
+  /**
+   * @type {HTMLElement}
+   */
+  domJoinContainer;
+
   /**
    * @type {WebSocket}
    */
@@ -20,14 +30,17 @@ class MediaSyncPlayer {
    */
   events = [];
 
+  wsUrl;
+
   testMode;
 
   constructor({ jwPlayer, wsUrl, testMode = false }) {
-    this.player = jwPlayer;
     this.testMode = testMode;
+    this.wsUrl = wsUrl;
 
-    this.__initPlayer();
-    this.__initWebSocket(wsUrl);
+    this.testMode && (window.msPlayer = this);
+
+    this.__initPlayer(jwPlayer);
   }
 
   __initWebSocket(wsUrl) {
@@ -54,15 +67,48 @@ class MediaSyncPlayer {
     /**
      * Custom events
      */
+    this.on("wsConnected", this.__onWSConnected);
+
     this.on("wsChangeState", this.__onWSChangeState);
 
     this.on("wsRequestState", this.__onWSRequestState);
   }
 
-  __initPlayer() {
+  __initPlayer(jwPlayer) {
+    this.player = jwPlayer;
+
+    this.player.on("ready", this.__onPlayerReady.bind(this));
+
     this.player.on("play", this.__onPlayerPlay.bind(this));
 
     this.player.on("pause", this.__onPlayerPause.bind(this));
+  }
+
+  __initPlayerJoin() {
+    this.domJoinContainer = document.querySelector(
+      '.msplayer-join-container[data-player="' + this.domPlayer.id + '"]'
+    );
+
+    this.domPlayer.append(this.domJoinContainer);
+
+    this.domJoinContainer
+      .querySelector(".msplayer-join")
+      .addEventListener("click", this.__onPlayerJoin.bind(this));
+  }
+
+  __onPlayerReady() {
+    this.domPlayer = this.player.getContainer();
+
+    // Pause player in case of autostart
+    this.player.pause();
+
+    this.__initPlayerJoin();
+  }
+
+  __onPlayerJoin() {
+    this.__initWebSocket(this.wsUrl);
+
+    // this.domJoinContainer.remove();
   }
 
   __onPlayerPlay(state) {
@@ -76,6 +122,20 @@ class MediaSyncPlayer {
     if (state.pauseReason == "interaction") {
       this.wsSendStateChange(state);
     }
+  }
+
+  __onWSConnected(ws, data) {
+    const { clientSize } = data;
+
+    this.testMode && console.log("Connecte to WS: ", data);
+
+    if (clientSize == 1) {
+      this.player.play();
+    }
+
+    this.testMode && console.log(data);
+
+    this.domJoinContainer.remove();
   }
 
   __onWSChangeState(ws, { params, ...msgEvent }) {

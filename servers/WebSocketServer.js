@@ -70,6 +70,7 @@ class WebSocketServer {
         event: "wsConnected",
         data: {
           clientId: ws.id,
+          clientSize: this.wss.clients.size,
         },
       })
     );

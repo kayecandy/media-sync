@@ -17,12 +17,22 @@
     <script src="./js/cndce-media-sync.js
     "></script>
 
+	<link rel="stylesheet" href="./css/cndce-media-sync.css">
+
 
 </head>
 
-	<h1>Client ID# <span id="client-id"></span></h1>
+	<h1>Client ID# <span id="client-id">NA</span></h1>
 	<p>
 		<div id="myElement"></div>
+		<div 
+			data-player="myElement" 
+			class="msplayer-join-container"
+		>
+		<div style="margin-bottom: 1rem;">Click on "Join Room" to enter active session</div>
+			<button class="msplayer-join">Join Room</button>
+
+		</div>
 	</p>
 
 	
