@@ -50,7 +50,7 @@
 		const msPlayer = new MediaSyncPlayer({
 			jwPlayer: cbPlayer.player,
 			wsUrl: "<%= wsUrl %>",
-			testMode: true,
+			testMode: <%= jsTestMode %>,
 		});
 
 		msPlayer.on('wsConnected', function(ws, data){
