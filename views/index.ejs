@@ -35,7 +35,7 @@
 		>
 		<div style="margin-bottom: 1rem;">Click on "Join Room" to enter active session</div>
 			<button class="msplayer-join">Join Room</button>
-
+		
 		</div>
 	</p>
 
@@ -54,7 +54,7 @@
 		const msPlayer = new MediaSyncPlayer({
 			jwPlayer: cbPlayer.player,
 			wsUrl: "<%= wsUrl %>",
-			testMode: <%= jsTestMode %>,
+			<% if(jsTestMode){ %> testMode:  <%=jsTestMode%>,<%} %>
 		});
 
 		msPlayer.on('wsConnected', function(ws, data){
