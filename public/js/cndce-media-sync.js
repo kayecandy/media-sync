@@ -91,11 +91,15 @@ class MediaSyncPlayer {
       '.msplayer-join-container[data-player="' + this.domPlayer.id + '"]'
     );
 
+    if (this.domJoinContainer) {
     this.domPlayer.append(this.domJoinContainer);
 
     this.domJoinContainer
       .querySelector(".msplayer-join")
       .addEventListener("click", this.__onPlayerJoin.bind(this));
+    } else {
+      this.__onPlayerJoin();
+    }
   }
 
   __onPlayerReady() {
@@ -137,7 +141,7 @@ class MediaSyncPlayer {
 
     this.testMode && console.log(data);
 
-    this.domJoinContainer.remove();
+    this.domJoinContainer && this.domJoinContainer.remove();
   }
 
   __onWSChangeState(ws, { params, ...msgEvent }) {
