@@ -16,4 +16,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url(https://media.giphy.com/media/xWlgutH3ZZF6w/giphy.gif);
+  background-size: 200px;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+.msplayer-join-container .msplayer-join {
+  background: none;
+  color: white;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  text-transform: capitalize;
 }
